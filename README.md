@@ -24,6 +24,14 @@ public static void ExampleUsage1()
 
     t.WaitOne();
 }
+
+private static void Ping(object obj)
+{
+    JobData jobData = (JobData)obj;//we receive JobData from each thread
+    string ip = (string)jobData.Job;
+    System.Net.NetworkInformation.Ping p = new Ping();
+    PingReply rep = p.Send(ip);
+}
 ```
 
 ```csharp
@@ -111,6 +119,14 @@ public static void ExampleDynamicJobQueue()
     stopwatch.Stop();
     Console.WriteLine("Phase-2:" + stopwatch.Elapsed);
 }
+
+private static void Ping(object obj)
+{
+    JobData jobData = (JobData)obj;//we receive JobData from each thread
+    string ip = (string)jobData.Job;
+    System.Net.NetworkInformation.Ping p = new Ping();
+    PingReply rep = p.Send(ip);
+}
 ```
 
 ```csharp
@@ -141,7 +157,7 @@ public static void ExampleAccessingQueue()
     //1- Create Pool
     ThreadPoolManager.Instance.CreatePool(new ThreadPoolOptions
     {
-        TargetMethod = targetMethod,
+        TargetMethod = Ping,
         PoolName = "testpool1",
         PoolSize = 10,
         ExitOnFinish = true
@@ -152,6 +168,14 @@ public static void ExampleAccessingQueue()
     //3-Start all thrads, belirtilen kadar Thread canlandirilir hepsi ayni methodu calistirir ve is kuyrugu tuketilir.
     //Not: WaitCallBack olarak belirlenen method isterse kuyruga is te ekleyebilir.
     ThreadPoolManager.Instance.Pool["testpool1"].Start();
+}
+
+private static void Ping(object obj)
+{
+    JobData jobData = (JobData)obj;//we receive JobData from each thread
+    string ip = (string)jobData.Job;
+    System.Net.NetworkInformation.Ping p = new Ping();
+    PingReply rep = p.Send(ip);
 }
 ```
 
